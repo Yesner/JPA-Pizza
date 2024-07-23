@@ -1,5 +1,6 @@
 package pizza.App.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class OrderItemEntity {
     private Double price;
 
     @ManyToOne
+    @JsonIgnore //Para formatear la salida de los resultados
     @JoinColumn(name = "id_order", referencedColumnName = "id_order", insertable = false, updatable = false)
     private OrderEntity order;
 
