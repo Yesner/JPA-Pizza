@@ -1,6 +1,7 @@
 package pizza.App.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pizza.App.persistence.entity.PizzaEntity;
@@ -22,10 +23,18 @@ public class PizzaController {
     }
 
     // Query all
-    @GetMapping
+    // Sin paginar
+    /*@GetMapping
     public ResponseEntity<List<PizzaEntity>>getAll()
     {
         return ResponseEntity.ok(this.pizzaService.getAll());
+    }*/
+
+    @GetMapping
+    public ResponseEntity<Page<PizzaEntity>>getAll(@RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "8") int elements)
+    {
+        return ResponseEntity.ok(this.pizzaService.getAll(page, elements));
     }
 
     // Query by id
@@ -35,11 +44,21 @@ public class PizzaController {
         return ResponseEntity.ok(this.pizzaService.get(idPizza));
     }
 
-    // Query by available
-    @GetMapping("/available")
+    // Query by available sin paginar
+    /*@GetMapping("/available")
     public ResponseEntity<List<PizzaEntity>>getAvailable()
     {
         return ResponseEntity.ok(this.pizzaService.getAvailable());
+    }*/
+
+    //Paginado
+    @GetMapping("/available")
+    public ResponseEntity<Page<PizzaEntity>>getAvailable(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "8") int elements,
+                                                         @RequestParam(defaultValue = "price") String sortBy,
+                                                         @RequestParam(defaultValue = "ASC") String sortDirection)
+    {
+        return ResponseEntity.ok(this.pizzaService.getAvailable(page, elements, sortBy,sortDirection));
     }
 
     // Query by name
@@ -61,6 +80,13 @@ public class PizzaController {
     public ResponseEntity<List<PizzaEntity>>getWithout(@PathVariable String ingredient)
     {
         return ResponseEntity.ok(this.pizzaService.getWithout(ingredient));
+    }
+
+    // Query by without ingredient
+    @GetMapping("/cheapest/{price}")
+    public ResponseEntity<List<PizzaEntity>>getCheapest(@PathVariable Double price)
+    {
+        return ResponseEntity.ok(this.pizzaService.getCheapest(price));
     }
 
 
