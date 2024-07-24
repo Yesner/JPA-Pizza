@@ -1,9 +1,13 @@
 package pizza.App.service;
 
+import jakarta.persistence.OrderBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pizza.App.persistence.entity.OrderEntity;
+import pizza.App.persistence.projection.OrderSummary;
 import pizza.App.persistence.repository.OrderRepository;
+import pizza.App.service.dto.RandomOrderDto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,5 +50,18 @@ public class OrderService {
     {
         return this.orderRepository.findCustomerOrders(idCustomer);
     }
+
+    public OrderSummary getSummary(int orderId)
+    {
+        return this.orderRepository.findSummary(orderId);
+    }
+
+    @Transactional
+    public boolean saveRandomOrder(RandomOrderDto randomOrderDto)
+    {
+        return this.orderRepository.saveRandomOrder(randomOrderDto.getIdCustomer(), randomOrderDto.getMethod());
+    }
+
+
 
 }

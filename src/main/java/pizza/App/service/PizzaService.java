@@ -6,9 +6,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pizza.App.persistence.entity.PizzaEntity;
 import pizza.App.persistence.repository.PizzaPagSortRepository;
 import pizza.App.persistence.repository.PizzaRepository;
+import pizza.App.service.dto.UpdatePizzaPriceDto;
 
 import java.util.List;
 
@@ -108,6 +110,12 @@ public class PizzaService {
     public void delete(int idPizza)
     {
         this.pizzaRepository.deleteById(idPizza);
+    }
+
+    @Transactional // Produce Atomicidad con el repositorio
+    public void updatePrice(UpdatePizzaPriceDto dto)
+    {
+        this.pizzaRepository.updatePrice(dto);
     }
 
     public Boolean exists(int idPizza)

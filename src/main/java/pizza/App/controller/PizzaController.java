@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pizza.App.persistence.entity.PizzaEntity;
 import pizza.App.service.PizzaService;
+import pizza.App.service.dto.UpdatePizzaPriceDto;
 
 import java.util.List;
 
@@ -109,6 +110,19 @@ public class PizzaController {
         if (pizza.getIdPizza()!=null && this.pizzaService.exists(pizza.getIdPizza())) {
 
             return ResponseEntity.ok(this.pizzaService.save(pizza));
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    //Update price
+    @PutMapping("/price")
+    public ResponseEntity<Void>updatePrice(@RequestBody UpdatePizzaPriceDto dto)
+    {
+        if (this.pizzaService.exists(dto.getPizzaId())) {
+
+            this.pizzaService.updatePrice(dto);
+            return ResponseEntity.ok().build();
         }
 
         return ResponseEntity.badRequest().build();
